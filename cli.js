@@ -63,7 +63,7 @@ app.delete('/api/blogs/:id', async (req, res) => {
     await blog.destroy()
     res.json(blog)
   } else {
-    res.status(404).end()
+    res.status(204).end()
   }
 })
 

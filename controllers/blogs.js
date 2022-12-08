@@ -10,7 +10,7 @@ const tokenExtractor = (req, res, next) => {
     try {
       console.log(authorization.substring(7))
       req.decodedToken = jwt.verify(authorization.substring(7), SECRET)
-    } catch (error){
+    } catch (error) {
       console.log(error)
       return res.status(401).json({ error: 'token invalid' })
     }
@@ -47,19 +47,23 @@ router.get('/:id', blogFinder, async (req, res) => {
   }
 })
 
-router.delete('/:id', blogFinder, async (req, res) => {
-  console.log(req.blog)
+router.delete('/:id', blogFinder, tokenExtractor, async (req, res) => {
+  const user = await User.findByPk(req.decodedToken.id)
   if (req.blog) {
-    await req.blog.destroy()
+    if (req.blog.userId === user.id) {
+      await req.blog.destroy()
+    } else {
+      res.status(400).end()
+    }
   }
   res.status(204).end()
 })
 
 router.put('/:id', blogFinder, async (req, res) => {
-    req.blog.likes = req.body.likes
-    await req.blog.save()
-    res.json(req.blog)
-    res.status(404).end()
+  req.blog.likes = req.body.likes
+  await req.blog.save()
+  res.json(req.blog)
+  res.status(404).end()
 })
 
 module.exports = router

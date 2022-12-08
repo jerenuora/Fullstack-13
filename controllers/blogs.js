@@ -2,6 +2,7 @@ const router = require('express').Router()
 const jwt = require('jsonwebtoken')
 const { SECRET } = require('../util/config')
 const { Op } = require('sequelize')
+const { sequelize } = require('../util/db')
 
 const { Blog, User } = require('../models')
 
@@ -39,7 +40,9 @@ router.get('/', async (req, res) => {
     },
     where: {
       [Op.or] : where
-    }
+    },
+    order: sequelize.literal('likes DESC'),
+
   })
   console.log(JSON.stringify(blogs, null, 2))
   res.json(blogs)

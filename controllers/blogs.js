@@ -27,6 +27,9 @@ router.get('/', async (req, res) => {
   if (req.query.search) {
     where.title = {
       [Op.iLike]: req.query.search
+    },
+    where.author = {
+      [Op.iLike]: req.query.search
     }
   }
 
@@ -34,7 +37,9 @@ router.get('/', async (req, res) => {
     include: {
       model: User
     },
-    where
+    where: {
+      [Op.or] : where
+    }
   })
   console.log(JSON.stringify(blogs, null, 2))
   res.json(blogs)

@@ -24,25 +24,25 @@ const tokenExtractor = (req, res, next) => {
 
 router.get('/', async (req, res) => {
   const where = {}
+  console.log(req.query.search)
 
-  if (req.query.search) {
-    where.title = {
-      [Op.iLike]: req.query.search
+  where[Op.or] = {
+    title: {
+      [Op.iLike]: req.query.search,
     },
-    where.author = {
-      [Op.iLike]: req.query.search
-    }
+    author: {
+      [Op.iLike]: req.query.search,
+    },
   }
 
   const blogs = await Blog.findAll({
     include: {
-      model: User
+      model: User,
     },
     where: {
-      [Op.or] : where
+      ...(req.query.search && where),
     },
     order: sequelize.literal('likes DESC'),
-
   })
   console.log(JSON.stringify(blogs, null, 2))
   res.json(blogs)

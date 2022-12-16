@@ -1,4 +1,5 @@
 const router = require('express').Router()
+const { Op } = require('sequelize')
 
 const { User, Blog, Readinglist } = require('../models')
 
@@ -27,7 +28,8 @@ router.get('/:id', async (req, res) => {
       },
       include: {
         model: Readinglist,
-        attributes: ['read','id']
+        attributes: ['read','id'],
+        where: {user_id: req.params.id},
       }
 
     },

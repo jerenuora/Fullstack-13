@@ -13,10 +13,9 @@ module.exports = {
         allowNull: false,
         references: { model: 'users', key: 'id' },
       },
-      valid: {
-        type: DataTypes.BOOLEAN,
+      token: {
+        type: DataTypes.STRING,
         allowNull: false,
-        defaultValue: false,
       },
     })
   },

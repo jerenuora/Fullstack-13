@@ -16,12 +16,10 @@ Sessions.init({
       allowNull: false,
       references: { model: 'users', key: 'id' },
     },
-    valid: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-
-    },
+    token: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
   }, {
     sequelize,
     underscored: true,
